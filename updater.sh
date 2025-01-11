@@ -15,3 +15,4 @@ for file in ${files[$1]}; do
                 echo "fully updated"
         fi
 done
+rm temp.txt
