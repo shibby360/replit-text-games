@@ -3,6 +3,7 @@ files["sk-uv"]="bases.py enemys.py heros.py idgen.py main.py weapons.py"
 files["u-v"]="main.py"
 files["water-gun-war"]="main.py"
 files["text-village-game"]="buildings.py main.py troops.py"
+files["cpp-card-game"]="card-game.cpp"
 for file in ${files[$1]}; do
         curl "https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/$1/$file" > temp.txt
         if cmp -s temp.txt $1/$file; then
