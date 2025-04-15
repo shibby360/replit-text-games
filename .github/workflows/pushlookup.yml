@@ -1,0 +1,28 @@
+name: push file lookups
+on: [push]
+jobs:
+  add_tree:
+    permissions:
+      contents: write
+    runs-on: ubuntu-22.04
+    steps:
+    - name: checkout repo
+      uses: actions/checkout@v4
+
+    - name: create files
+      run: |
+        for i in $(ls); do
+            if [ -d $i ]; then
+                echo $(./list.sh $i) > $i/files
+            fi
+        done
+    - name: Commit and push changes
+      env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+      run: |
+        git config --global user.name "shivank chhaya"
+        git config --global user.email "shivank.chhaya@gmail.com"
+        git add .
+        git commit -m "pushed new lookup files"
+        git push origin main
+      
