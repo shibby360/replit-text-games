@@ -4,9 +4,11 @@ if [ "$1" == "-d" ]; then
     echo "downloading"
     mkdir $2
     for file in $(curl https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/$2/files); do
-        mkdir -p "$(dirname $file)"
-        wget "https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/$file" -O $file &> /dev/null
-        echo downloaded $file
+        if ! [ "$(basename $files)" == "files" ]; then
+            mkdir -p "$(dirname $file)"
+            wget "https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/$file" -O $file &> /dev/null
+            echo downloaded $file
+        fi
     done
     cd ..
 elif [ "$1" == "-u" ]; then
