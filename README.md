@@ -10,3 +10,6 @@ just `cd` to the directory, enable any permissions, and then run `main.py` or wh
 
 keep all the game directories and `manager.sh` all at the same level wherever you put them  
 to update, just run `manager.sh -u <game-name>` ex. `manager.sh -u sk-uv`
+
+
+to update `manager.sh`, run `manager.sh -s`
