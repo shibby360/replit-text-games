@@ -4,7 +4,7 @@ if [ "$1" == "-d" ]; then
     echo "downloading"
     mkdir $2
     for file in $(curl https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/$2/files); do
-        if ! [ "$(basename $files)" == "files" ]; then
+        if ! [ "$(basename $file)" == "files" ]; then
             mkdir -p "$(dirname $file)"
             wget "https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/$file" -O $file &> /dev/null
             echo downloaded $file
