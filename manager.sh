@@ -7,6 +7,7 @@ if [ "$1" == "-d" ]; then
         if ! [ "$(basename $file)" == "files" ]; then
             mkdir -p "$(dirname $file)"
             wget "https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/$file" -O $file &> /dev/null
+            chmod 777 $file
             echo downloaded $file
         fi
     done
@@ -33,6 +34,7 @@ elif [ "$1" == "-s" ]; then
         :
     else
         mv temp.txt manager.sh
+        chmod 777 manager.sh
         echo "new manager.sh file"
     fi
 else
