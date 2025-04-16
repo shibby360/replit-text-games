@@ -11,9 +11,19 @@ jobs:
 
     - name: create files
       run: |
+        function list() {
+          files=$(ls $1)
+          for i in $files; do
+            if [ -d "$1/$i" ]; then
+              list "$1/$i"
+            else
+              echo $1/$i
+            fi
+          done
+        }
         for i in $(ls); do
             if [ -d $i ]; then
-                echo $(./list.sh $i) > $i/files
+                echo $(list $i) > $i/files
             fi
         done
     - name: Commit and push changes
