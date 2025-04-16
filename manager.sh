@@ -25,7 +25,16 @@ elif [ "$1" == "-u" ]; then
         fi
     done
     rm temp.txt
+elif [ "$1" == "-s" ]; then
+    curl "https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/manager.sh" > temp.txt
+    if cmp -s temp.txt manager.sh; then
+        :
+    else
+        mv temp.txt manager.sh
+        echo "new manager.sh file"
+    fi
 else
     echo "-d <game name> to download"
     echo "-u <game name> to update"
+    echo "-s to update manager file"
 fi
