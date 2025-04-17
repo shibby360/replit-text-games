@@ -21,6 +21,7 @@ jobs:
             fi
           done
         }
+        echo "" > allgames
         for i in $(ls); do
             if [ -d $i ]; then
                 echo $(list $i) > $i/files
