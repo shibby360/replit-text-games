@@ -24,6 +24,7 @@ jobs:
         for i in $(ls); do
             if [ -d $i ]; then
                 echo $(list $i) > $i/files
+                echo $i >> allgames
             fi
         done
     - name: Commit and push changes
