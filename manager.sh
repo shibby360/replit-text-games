@@ -11,7 +11,7 @@ while getopts ":d:u:sa" opt; do
         d)
             echo "downloading"
             mkdir ${OPTARG}
-            for file in $(curl https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/${OPTARG}/files); do
+            for file in $(curl -H "Cache-Control: no-cache" https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/${OPTARG}/files); do
                 if ! [ "$(basename $file)" == "files" ]; then
                     mkdir -p "$(dirname $file)"
                     wget "https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/$file" -O $file &> /dev/null
@@ -22,8 +22,8 @@ while getopts ":d:u:sa" opt; do
             cd ..
             ;;
         u)
-            for file in $(curl https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/${OPTARG}/files); do
-                curl "https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/$file" > temp.txt
+            for file in $(curl -H "Cache-Control: no-cache" https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/${OPTARG}/files); do
+                curl -H "Cache-Control: no-cache" "https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/$file" > temp.txt
                 if cmp -s temp.txt $file; then
                     :
                 else
@@ -39,7 +39,7 @@ while getopts ":d:u:sa" opt; do
             rm temp.txt
             ;;
         s)
-            curl "https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/manager.sh" > temp.txt
+            curl -H "Cache-Control: no-cache" "https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/manager.sh" > temp.txt
             if cmp -s temp.txt manager.sh; then
                 :
             else
@@ -49,7 +49,7 @@ while getopts ":d:u:sa" opt; do
             fi
             ;;
         a)
-            curl "https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/allgames"
+            curl -H "Cache-Control: no-cache" "https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/allgames"
             ;;
         :)
             usage
