@@ -1,5 +1,11 @@
 #!/bin/bash
 
+function usage() {
+    echo "-d <game name> to download"
+    echo "-u <game name> to update"
+    echo "-s to update manager file"
+    echo "-a to view all games"
+}
 while getopts ":d:u:sa" opt; do
     case "${opt}" in
         d)
@@ -43,13 +49,14 @@ while getopts ":d:u:sa" opt; do
             fi
             ;;
         a)
-            echo $(curl "https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/allgames")
+            curl "https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/allgames"
             ;;
-        *)
-            echo "-d <game name> to download"
-            echo "-u <game name> to update"
-            echo "-s to update manager file"
-            echo "-a to view all games"
+        :)
+            usage
+            ;;
+        ?)
+            usage
             ;;
     esac
 done
+shift $((OPTIND-1))
