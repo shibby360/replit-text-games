@@ -41,7 +41,7 @@ while getopts ":d:u:sa" opt; do
         s)
             curl -H "Cache-Control: no-cache" "https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/manager.sh" > temp.txt
             if cmp -s temp.txt manager.sh; then
-                :
+                rm temp.txt
             else
                 mv temp.txt manager.sh
                 chmod 777 manager.sh
@@ -60,7 +60,7 @@ while getopts ":d:u:sa" opt; do
     esac
 done
 
-if [ $# -eq 0 ]; then
+if ! [[ "$1" == -* ]]; then
     usage
 fi
 shift $((OPTIND-1))
