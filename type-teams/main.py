@@ -8,7 +8,7 @@ except ModuleNotFoundError:
   import shdwdb
 os.system('clear')
 kts = 'stats'
-userDB = ShdwDB.retrieve('User stats', kts)
+userDB = shdwdb.retrieve('User stats', kts)
 userDB.kts = kts
 userDB.autosave = True
 userDB.def_val = 0
@@ -22,14 +22,14 @@ import enemies.circuitizer as circuitizer
 name = input('Name?: ')
 pwd = input('Password?: ')
 def auth(name, pwd):
-  if name+'-password' in ShdwDB.db:
-    if ShdwDB.db[name+'-password'] == pwd:
+  if name+'-password' in shdwdb.db:
+    if shdwdb.db[name+'-password'] == pwd:
       pass
     else:
       print('Invaid authorization.')
       exit()
   else:
-    ShdwDB.db[name+'-password'] = pwd
+    shdwdb.db[name+'-password'] = pwd
 auth(name, pwd)
 attrs = None
 def prof(name):

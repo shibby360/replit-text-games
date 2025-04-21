@@ -18,8 +18,8 @@ def reset(user, *resets):
   userDB.save(kts)
 
 kts = 'stats'
-userDB = ShdwDB.retrieve('User stats', kts)
-#userDB = ShdwDB.make('User stats', ['Shdw'], ['coins', 'energy', 'health', 'keys', 'gems', 'Patriots'])
+userDB = shdwdb.retrieve('User stats', kts)
+#userDB = shdwdb.make('User stats', ['Shdw'], ['coins', 'energy', 'health', 'keys', 'gems', 'Patriots'])
 name = input('Name?: ')
 userDB.def_val = 0
 userDB.autosave = True
@@ -51,9 +51,9 @@ while True:
   elif b == 'archive':
     archiveprof = userDB.get_column(name)
     key = input('key?: ')
-    svdprfs = ShdwDB.db['archived profiles']
+    svdprfs = shdwdb.db['archived profiles']
     svdprfs[key] = archiveprof
-    ShdwDB.db['archived profiles'] = svdprfs
+    shdwdb.db['archived profiles'] = svdprfs
     userDB.delete_column(name)
     name = input('New name?: ')
     userDB.add_column(name)

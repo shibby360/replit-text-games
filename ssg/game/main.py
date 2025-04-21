@@ -18,7 +18,7 @@ def reset(user, *resets) -> None:
     userDB.set(user, reset, type(userDB.get_value(user, reset))())
   userDB.save(kts)
 kts = 'stats'
-userDB = ShdwDB.retrieve('User stats', kts)
+userDB = shdwdb.retrieve('User stats', kts)
 userDB.autosave = True
 userDB.def_val = 0
 userDB.kts = kts
@@ -26,14 +26,14 @@ userDB.kts = kts
 name = input('Name?: ')
 pwd = input('Password?: ')
 def auth(name, pwd):
-  if name+'-password' in ShdwDB.db:
-    if ShdwDB.db[name+'-password'] == pwd:
+  if name+'-password' in shdwdb.db:
+    if shdwdb.db[name+'-password'] == pwd:
       pass
     else:
       print('Invaid authorization.')
       exit()
   else:
-    ShdwDB.db[name+'-password'] = pwd
+    shdwdb.db[name+'-password'] = pwd
 auth(name, pwd)
 attrs = None
 def prof(name):
@@ -386,7 +386,7 @@ while True:
     yn = input('Are you sure you want to do this(Y for yes and N for no)?').lower()
     if yn == 'y':
       userDB.delete_column(name)
-      del ShdwDB.db[name+'-password']
+      del shdwdb.db[name+'-password']
       userDB.save(kts)
       break
   elif choice == '5':
@@ -441,7 +441,7 @@ while True:
     viewprof(userDB.get_column(profname))
     input()
   elif choice == '8':
-    giftcards = ShdwDB.db['giftcards']
+    giftcards = shdwdb.db['giftcards']
     amnt = int(input('Amount(Just number)?: '))
     unit = input('Unit(coins, gems, keys, etc.)?: ').lower()
     if amnt > attrs[unit]:
@@ -465,11 +465,11 @@ while True:
     newmnt = str(amnt) + ' '
     giftcards.append({'from':name, 'redeemcode':code, 'amount':newmnt + unit})
     print(f'https://SSG-The-game-gift-cards.shivankchhaya.repl.co?redeemcode={code}&from={name}&amount={newmnt + unit}')
-    ShdwDB.db['giftcards'] = giftcards
+    shdwdb.db['giftcards'] = giftcards
     input()
   elif choice == '9':
     redeemcode = input('Redeem code?: ')
-    giftcards = ShdwDB.db['giftcards']
+    giftcards = shdwdb.db['giftcards']
     for giftcard in giftcards:
       if giftcard['redeemcode'] == redeemcode:
         if giftcard['from'] == name:
@@ -483,7 +483,7 @@ while True:
           print('Redeemed you gift card!')
           input()
           giftcards.remove(giftcard)
-          ShdwDB.db['giftcards'] = giftcards
+          shdwdb.db['giftcards'] = giftcards
           continue
   userDB.set(name, 'ancmnts', [])
   userDB.save(kts)
