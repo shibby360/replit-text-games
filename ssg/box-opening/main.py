@@ -1,10 +1,10 @@
 import os
 try:
-  import ShdwDB
+  import shdwdb
 except ModuleNotFoundError:
-  os.system('pip install ShdwDB')
+  os.system('pip install shdwdb')
   os.system('clear')
-  import ShdwDB 
+  import shdwdb
 #from replit import db
 import items
 def mergelists(list1, list2):

@@ -1,11 +1,11 @@
 import os
 import random as r
 try:
-  import ShdwDB
+  import shdwdb
 except ModuleNotFoundError:
-  os.system('pip install ShdwDB')
+  os.system('pip install shdwdb')
   os.system('clear')
-  import ShdwDB
+  import shdwdb
 import boxs
 import patrs
 def mergelists(list1, list2) -> list:

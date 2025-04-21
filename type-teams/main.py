@@ -2,10 +2,10 @@ import os
 import random as r
 import replit.database.database as dber
 try:
-  import ShdwDB
+  import shdwdb
 except ModuleNotFoundError:
-  os.system('pip install ShdwDB')
-  import ShdwDB
+  os.system('pip install shdwdb')
+  import shdwdb
 os.system('clear')
 kts = 'stats'
 userDB = ShdwDB.retrieve('User stats', kts)
