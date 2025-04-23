@@ -22,18 +22,19 @@ userDB = shdwdb.retrieve('User stats', kts)
 userDB.autosave = True
 userDB.def_val = 0
 userDB.kts = kts
+creds = shdwdb.retrieve('creds', 'creds.json')
 
 name = input('Name?: ')
 pwd = input('Password?: ')
 def auth(name, pwd):
-  if name+'-password' in shdwdb.db:
-    if shdwdb.db[name+'-password'] == pwd:
+  if name in creds.get_column('password'):
+    if creds.get_value('password',name) == pwd:
       pass
     else:
       print('Invaid authorization.')
       exit()
   else:
-    shdwdb.db[name+'-password'] = pwd
+    creds.set('password',name,pwd)
 auth(name, pwd)
 attrs = None
 def prof(name):
