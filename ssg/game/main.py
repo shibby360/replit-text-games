@@ -16,13 +16,23 @@ def mergelists(list1, list2) -> list:
 def reset(user, *resets) -> None:
   for reset in resets:
     userDB.set(user, reset, type(userDB.get_value(user, reset))())
-  userDB.save(kts)
-kts = 'stats'
-userDB = shdwdb.retrieve('User stats', kts)
+  userDB.save(fnts)
+fnts = 'stats.json'
+if not os.path.isfile(fnts):
+  userDB = shdwdb.make('User stats',['ex'],['Patriots','Soldiers','ancmnts','share market', 'coins', 'energy', 'health', 'keys', 'gems', 'Medals','Collected 10K reward'], defaut_value=0)
+else:
+  userDB = shdwdb.retrieve('User stats', fnts)
+  if 'ex' in userDB.data:
+    userDB.delete_column('ex')
 userDB.autosave = True
 userDB.def_val = 0
-userDB.kts = kts
-creds = shdwdb.retrieve('creds', 'creds.json')
+userDB.fnts = fnts
+if not os.path.isfile('creds.json'):
+  creds = shdwdb.make('creds', ['password'], [])
+else:
+  creds = shdwdb.retrieve('creds', 'creds.json')
+creds.autosave = True
+creds.fnts = 'creds.json'
 
 name = input('Name?: ')
 pwd = input('Password?: ')
@@ -34,6 +44,7 @@ def auth(name, pwd):
       print('Invaid authorization.')
       exit()
   else:
+    creds.add_row(name)
     creds.set('password',name,pwd)
 auth(name, pwd)
 attrs = None
@@ -67,7 +78,7 @@ def viewprof(attrs):
 def setall(key, value):
   for dat in userDB:
     userDB.data[dat][key] = value
-  userDB.save(kts)
+  userDB.save(fnts)
 while True:
   os.system('clear')
   #print('\x1b[0;34mBETA\x1b[0m')
@@ -77,7 +88,7 @@ while True:
     input()
   viewprof(attrs)
   print('-------')
-  print('[1]Battle\n[2]Shop\n[3]Exit\n[4]Delete account\n[5]Switch Account\n[6]Go to Share market\n[7]View a profile\n[8]Create a gift card\n[9]Redeem a gift card')
+  print('[1]Battle\n[2]Shop\n[3]Exit\n[4]Delete account\n[5]Switch Account\n[6]Go to Share market\n[7]View a profile\n[8]Create a gift card(doesn\'t work)\n[9]Redeem a gift card(also doesn\'t work)')
   choice = input('Which one?: ')
   os.system('clear')
   if choice == '1':
@@ -381,14 +392,14 @@ while True:
       userDB.set(name, 'coins', userDB.get_value(name, 'coins')+roundup(worthdec/2))
       userDB.data[name]['share market']['share worth'] -= worthdec
   elif choice == '3':
-    userDB.save(kts)
+    userDB.save(fnts)
     break
   elif choice == '4':
     yn = input('Are you sure you want to do this(Y for yes and N for no)?').lower()
     if yn == 'y':
       userDB.delete_column(name)
-      del shdwdb.db[name+'-password']
-      userDB.save(kts)
+      creds.delete_row(name)
+      userDB.save(fnts)
       break
   elif choice == '5':
     name = input('Name?: ')
@@ -436,7 +447,7 @@ while True:
             userDB.data[who]['share market']['shares'] = 1
       elif stockchoice == '2':
         break
-      userDB.save(kts)
+      userDB.save(fnts)
   elif choice == '7':
     profname = input('Who\'s profile would you like to view?: ')
     viewprof(userDB.get_column(profname))
@@ -487,4 +498,4 @@ while True:
           shdwdb.db['giftcards'] = giftcards
           continue
   userDB.set(name, 'ancmnts', [])
-  userDB.save(kts)
+  userDB.save(fnts)

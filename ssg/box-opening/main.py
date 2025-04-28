@@ -15,11 +15,22 @@ def mergelists(list1, list2):
 def reset(user, *resets):
   for reset in resets:
     userDB.set(user, reset, type(userDB.get_value(user, reset))())
-  userDB.save(kts)
+  userDB.save(fnts)
+if not os.path.isfile('saved.json'):
+  saved = {}
+  with open('saved.json', 'w') as f:
+    f.write(shdwdb.json.dumps(saved))
+else:
+  with open('saved.json', 'r') as f:
+    saved = shdwdb.json.loads(f.read())
 
-kts = 'stats'
-userDB = shdwdb.retrieve('User stats', kts)
-#userDB = shdwdb.make('User stats', ['Shdw'], ['coins', 'energy', 'health', 'keys', 'gems', 'Patriots'])
+fnts = 'stats.json'
+if not os.path.isfile('stats.json'):
+  userDB = shdwdb.make('User stats', ['ex'], ['coins', 'energy', 'health', 'keys', 'gems', 'Patriots'], defaut_value=0)
+else:
+  userDB = shdwdb.retrieve('User stats', fnts)
+  if 'ex' in userDB.data:
+    userDB.delete_column('ex')
 name = input('Name?: ')
 userDB.def_val = 0
 userDB.autosave = True
@@ -27,6 +38,7 @@ try:
   attrs = userDB.get_column(name)
 except KeyError:
   userDB.add_column(name)
+  userDB.set(name, 'Patriots', [])
   attrs = userDB.get_column(name)
 while True:
   print('-------\nStats:')
@@ -46,17 +58,18 @@ while True:
         chestschoosable.append(chest['chest'])
   b = input(f'Which chest{chestschoosable}?: ')
   if b == 'break':
-    userDB.save(kts)
+    userDB.save(fnts)
     break
   elif b == 'archive':
     archiveprof = userDB.get_column(name)
     key = input('key?: ')
-    svdprfs = shdwdb.db['archived profiles']
-    svdprfs[key] = archiveprof
-    shdwdb.db['archived profiles'] = svdprfs
+    saved[key] = archiveprof
+    with open('saved.json', 'w') as f:
+      f.write(shdwdb.json.dumps(saved))
     userDB.delete_column(name)
     name = input('New name?: ')
     userDB.add_column(name)
+    userDB.set(name, 'Patriots', [])
     attrs = userDB.get_column(name)
   while b not in chestschoosable:
     b = input(f'Which chest{chestschoosable}?: ')
@@ -66,7 +79,7 @@ while True:
   cost = thechest['cost']
   userDB.set(name, unit, attrs[unit]-cost)
   print('-------')
-  ret = items.SSGer('c', b, userDB.get_value('Shdw', 'Patriots'))
+  ret = items.SSGer('c', b, userDB.get_value(name, 'Patriots'))
   userDB.set(name, 'coins', userDB.get_value(name, 'coins')+ret['coins'])
   userDB.set(name, 'energy', userDB.get_value(name, 'energy')+ret['energy'])
   userDB.set(name, 'health', userDB.get_value(name, 'health')+ret['health'])
@@ -76,6 +89,6 @@ while True:
     userDB.set(name, 'Patriots', mergelists(userDB.get_value(name, 'Patriots'), ret['Patriot']))
   if 'gems' in ret:
     userDB.set(name, 'gems', userDB.get_value(name, 'gems')+ret['gems'])
-  userDB.save(kts)
+  userDB.save(fnts)
 
 #Add merge function to Shdw
