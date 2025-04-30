@@ -1,10 +1,12 @@
 #!/bin/bash
-
+fullpath=$(realpath $0)
+cd $(dirname $fullpath)
 function usage() {
     echo "-d <game name> to download"
     echo "-u <game name> to update"
     echo "-s to update manager file"
     echo "-a to view all games"
+    echo "-t <game name> to view tutorial"
 }
 allgames=$(curl -s -H "Cache-Control: no-cache" "https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/allgames")
 function isGame() {
@@ -36,16 +38,18 @@ while getopts ":d:u:sa" opt; do
             fi
             for file in $(curl -s -H "Cache-Control: no-cache" https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/${OPTARG}/files); do
                 curl -s -H "Cache-Control: no-cache" "https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/$file" > temp.txt
-                if cmp -s temp.txt $file; then
-                    :
-                else
-                    echo "Updates needed for ${OPTARG}"
-                    echo "Making updates for ${OPTARG}"
-                    echo "deleting ${OPTARG} directory"
-                    rm -r ${OPTARG}
-                    echo "removed, now reinstalling"
-                    ./manager.sh -d ${OPTARG}
-                    echo "fully updated"
+                if ! [ "$(basename $file)" == "files" ]; then
+                    if cmp -s temp.txt $file; then
+                        echo "no updates needed"
+                    else
+                        echo "Updates needed for ${OPTARG}"
+                        echo "Making updates for ${OPTARG}"
+                        echo "deleting ${OPTARG} directory"
+                        rm -r ${OPTARG}
+                        echo "removed, now reinstalling"
+                        $fullpath -d ${OPTARG}
+                        echo "fully updated"
+                    fi
                 fi
             done
             rm temp.txt
@@ -62,6 +66,9 @@ while getopts ":d:u:sa" opt; do
             ;;
         a)
             echo "${allgames[@]}"
+            ;;
+        t)
+            cat ${OPTARG}/tutorial
             ;;
         :)
             usage
