@@ -1,0 +1,11 @@
+game:
+    cd game
+    python3 main.py
+    OR
+    python3 game/main.py
+
+box-opening:
+    cd box-opening
+    python3 main.py
+    OR
+    python3 box-opening/main.py

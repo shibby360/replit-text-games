@@ -1,0 +1,2 @@
+gcc card-game.cpp -o card-game.exe
+card-game.exe

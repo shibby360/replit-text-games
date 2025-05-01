@@ -4,15 +4,16 @@ cd $(dirname $fullpath)
 function usage() {
     echo "-d <game name> to download"
     echo "-u <game name> to update"
+    echo "-t <game name> to view tutorial"
+    echo "-r <game name> to delete"
     echo "-s to update manager file"
     echo "-a to view all games"
-    echo "-t <game name> to view tutorial"
 }
 allgames=$(curl -s -H "Cache-Control: no-cache" "https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/allgames")
 function isGame() {
     echo "${allgames[@]}" | grep -F -q $1
 }
-while getopts ":d:u:sa" opt; do
+while getopts ":d:u:t:r:sa" opt; do
     case "${opt}" in
         d)
             if ! isGame ${OPTARG}; then
@@ -68,7 +69,18 @@ while getopts ":d:u:sa" opt; do
             echo "${allgames[@]}"
             ;;
         t)
-            cat ${OPTARG}/tutorial
+            if [ -d ${OPTARG} ]; do
+                cat ${OPTARG}/tutorial
+            fi
+            ;;
+        r)
+            if [ -d ${OPTARG} ]; do
+                echo "WARNING: some games save data locally, so consider saving those files individually before deleting"
+                read -p "are you sure you want to delete(y/n)" ${OPTARG} areyousure;
+                if [ "$areyousure" == "y" ]; do
+                    rm -r ${OPTARG}
+                done
+            done
             ;;
         :)
             usage
