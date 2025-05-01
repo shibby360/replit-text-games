@@ -4,16 +4,15 @@ cd $(dirname $fullpath)
 function usage() {
     echo "-d <game name> to download"
     echo "-u <game name> to update"
-    echo "-t <game name> to view tutorial"
-    echo "-r <game name> to delete"
     echo "-s to update manager file"
     echo "-a to view all games"
+    echo "-t <game name> to view tutorial"
 }
 allgames=$(curl -s -H "Cache-Control: no-cache" "https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/allgames")
 function isGame() {
     echo "${allgames[@]}" | grep -F -q $1
 }
-while getopts ":d:u:t:r:sa" opt; do
+while getopts ":d:u:sa" opt; do
     case "${opt}" in
         d)
             if ! isGame ${OPTARG}; then
@@ -41,19 +40,16 @@ while getopts ":d:u:t:r:sa" opt; do
                 curl -s -H "Cache-Control: no-cache" "https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/$file" > temp.txt
                 if ! [ "$(basename $file)" == "files" ]; then
                     if cmp -s temp.txt $file; then
-                        echo "no updates needed"
+                        echo "no updates needed for $file"
                     else
-                        echo "Updates needed for ${OPTARG}"
-                        echo "Making updates for ${OPTARG}"
-                        echo "deleting ${OPTARG} directory"
-                        rm -r ${OPTARG}
-                        echo "removed, now reinstalling"
-                        $fullpath -d ${OPTARG}
-                        echo "fully updated"
+                        echo "Updates needed for $file"
+                        mv temp.txt $file
+                        chmod 777 $file
+                        echo "updated $file"
                     fi
                 fi
             done
-            rm temp.txt
+            rm temp.txt &> /dev/null
             ;;
         s)
             curl -s -H "Cache-Control: no-cache" "https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/manager.sh" > temp.txt
@@ -69,18 +65,7 @@ while getopts ":d:u:t:r:sa" opt; do
             echo "${allgames[@]}"
             ;;
         t)
-            if [ -d ${OPTARG} ]; then
-                cat ${OPTARG}/tutorial
-            fi
-            ;;
-        r)
-            if [ -d ${OPTARG} ]; then
-                echo "WARNING: some games save data locally, so consider saving those files individually before deleting"
-                read -p "are you sure you want to delete(y/n)" ${OPTARG} areyousure;
-                if [ "$areyousure" == "y" ]; then
-                    rm -r ${OPTARG}
-                fi
-            fi
+            cat ${OPTARG}/tutorial
             ;;
         :)
             usage
