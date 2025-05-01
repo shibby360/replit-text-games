@@ -4,15 +4,15 @@ cd $(dirname $fullpath)
 function usage() {
     echo "-d <game name> to download"
     echo "-u <game name> to update"
+    echo "-t <game name> to view tutorial"
     echo "-s to update manager file"
     echo "-a to view all games"
-    echo "-t <game name> to view tutorial"
 }
 allgames=$(curl -s -H "Cache-Control: no-cache" "https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/allgames")
 function isGame() {
     echo "${allgames[@]}" | grep -F -q $1
 }
-while getopts ":d:u:sa" opt; do
+while getopts ":d:u:t:sa" opt; do
     case "${opt}" in
         d)
             if ! isGame ${OPTARG}; then
