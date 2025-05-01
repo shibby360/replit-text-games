@@ -69,15 +69,15 @@ while getopts ":d:u:t:r:sa" opt; do
             echo "${allgames[@]}"
             ;;
         t)
-            if [ -d ${OPTARG} ]; do
+            if [ -d ${OPTARG} ]; then
                 cat ${OPTARG}/tutorial
             fi
             ;;
         r)
-            if [ -d ${OPTARG} ]; do
+            if [ -d ${OPTARG} ]; then
                 echo "WARNING: some games save data locally, so consider saving those files individually before deleting"
                 read -p "are you sure you want to delete(y/n)" ${OPTARG} areyousure;
-                if [ "$areyousure" == "y" ]; do
+                if [ "$areyousure" == "y" ]; then
                     rm -r ${OPTARG}
                 done
             done
