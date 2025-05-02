@@ -5,6 +5,7 @@ function usage() {
     echo "-d <game name> to download"
     echo "-u <game name> to update"
     echo "-t <game name> to view tutorial"
+    echo "-r <game name> to delete a game"
     echo "-s to update manager file"
     echo "-a to view all games"
 }
@@ -12,7 +13,7 @@ allgames=$(curl -s -H "Cache-Control: no-cache" "https://raw.githubusercontent.c
 function isGame() {
     echo "${allgames[@]}" | grep -F -q $1
 }
-while getopts ":d:u:t:sa" opt; do
+while getopts ":d:u:t:r:sa" opt; do
     case "${opt}" in
         d)
             if ! isGame ${OPTARG}; then
@@ -66,6 +67,15 @@ while getopts ":d:u:t:sa" opt; do
             ;;
         t)
             cat ${OPTARG}/tutorial
+            ;;
+        r)
+            echo "Warning: some games store files locally, so save those files individually before deleting"
+            read "are you sure you want to delete ${OPTARG}(y/n) " areyousure;
+            if [ "$areyousure" == "y" ]; then
+                if [ -d ${OPTARG} ]; then
+                    rm -rf ${OPTARG}
+                fi
+            fi
             ;;
         :)
             usage
