@@ -70,7 +70,7 @@ while getopts ":d:u:t:r:sa" opt; do
             ;;
         r)
             echo "Warning: some games store files locally, so save those files individually before deleting"
-            read "are you sure you want to delete ${OPTARG}(y/n) " areyousure;
+            read -p "are you sure you want to delete ${OPTARG}(y/n) " areyousure;
             if [ "$areyousure" == "y" ]; then
                 if [ -d ${OPTARG} ]; then
                     rm -rf ${OPTARG}
