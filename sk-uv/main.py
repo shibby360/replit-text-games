@@ -368,8 +368,8 @@ while run:
       continu()
     else:
       userdata['base'] = choice.lower().replace(' ', '')
-    basehealthreduction = baseinuse.health*basepl - userdata['basehealth']
-    userdata['basehealth'] = baseinuse.health*basepl - basehealthreduction
+    basehealthpercent = userdata['basehealth'] / (baseinuse.health*basepl)
+    userdata['basehealth'] = int(basehealthpercent * (bases.bases[userdata['base']].health*basepl))
   elif cho == '5':
     if basepl >= 12:
       print('Base is maxed')
