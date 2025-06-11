@@ -1,6 +1,3 @@
-# unfinished, tasklist:
-# + building moving
-# + that one attacking bug
 import requests, buildings as bldg, troops as trp
 import json
 import random as rand
@@ -160,16 +157,17 @@ while run:
         blglvl = atkgblg['level']
         blghealth = atkgblgobj.health * blglvl
         while blghealth > 0 and dplydamnt > 0:
-          for i in range(dplydamnt):
-            if i >= len(troophealthlist):
-              break
+          i = 0
+          while i < len(troophealthlist):
             trpobj = trp.trooptypes[trpdplycho]
             blghealth -= trpobj.damage * vhlvl
             if atkgblgobj.type == 'defense':
               troophealthlist[i] -= atkgblgobj.otherdata['damage'] * blglvl
               if troophealthlist[i] <= 0:
                 dplydamnt -= 1
-                del troophealthlist[i]
+                troophealthlist.pop(i)
+                continue  # don't increment i, as list shrank
+            i += 1
         if blghealth <= 0:
           atkdata['buildings'][bdgid]['dead'] = True
           killedbuildings += atkdata['buildings'][bdgid]['level']
@@ -257,7 +255,56 @@ while run:
   elif cho == '6':
     os.system('clear')
     print(village(udata['buildings']))
-    continu()
+    print('Buildings:')
+    for b_id, b in udata['buildings'].items():
+      print(f"  {b['type']} at ({b['x']}, {b['y']})")
+    bldg_to_move_name = input('Enter the building name to move (or blank to cancel): ')
+    if not bldg_to_move_name:
+      print('Cancelled.')
+      continu()
+    try:
+      bldg_to_move_x = int(input('Enter the x coordinate of the building to move: '))
+      bldg_to_move_y = int(input('Enter the y coordinate of the building to move: '))
+    except ValueError:
+      print('Invalid coordinates.')
+      continu()
+      continue
+    bldg_to_move = None
+    for b_id, b in udata['buildings'].items():
+      if b['type'] == bldg_to_move_name and b['x'] == bldg_to_move_x and b['y'] == bldg_to_move_y:
+        bldg_to_move = b_id
+        break
+    if bldg_to_move is None:
+      print('No building found with that name and coordinates.')
+      continu()
+    else:
+      occps = []
+      for i in udata['buildings']:
+        if i == bldg_to_move:
+          continue
+        curbld = udata['buildings'][i]
+        cx = curbld['x']
+        cy = curbld['y']
+        occps.append((cx, cy))
+        occps.append((cx+1, cy))
+        occps.append((cx, cy+1))
+        occps.append((cx+1, cy+1))
+      while True:
+        try:
+          newx = int(input('New x: '))
+          newy = int(input('New y: '))
+        except ValueError:
+          print('Please enter valid integers.')
+          continue
+        newspots = [(newx, newy), (newx+1, newy), (newx, newy+1), (newx+1, newy+1)]
+        if any(spot in occps for spot in newspots):
+          print('That spot collides with another building. Try again.')
+          continue
+        break
+      udata['buildings'][bldg_to_move]['x'] = newx
+      udata['buildings'][bldg_to_move]['y'] = newy
+      print('Building moved!')
+      continu()
   elif cho == '7':
     save()
     exit()
