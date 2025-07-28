@@ -2,6 +2,7 @@
 terminal text games transferred over from replit
 
 download `manager.sh` to manage all games files
+`wget https://raw.githubusercontent.com/shibby360/replit-text-games/refs/heads/main/manager.sh`
 
 download with `manager.sh -d <game-name>` ex. `manager.sh -d sk-uv`  
 this will create a new directory called `sk-uv` and install all the necessary files in there  
